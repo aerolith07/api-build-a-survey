@@ -21,35 +21,35 @@ useDotenv: true
 
 functions:
   login:
-    handler: api/userHandler.login
+    handler: api/handler/userHandler.login
     events:
       - httpApi:
           path: /login
           method: post
 
   logout:
-    handler: api/userHandler.logout
+    handler: api/handler/userHandler.logout
     events:
       - httpApi:
           path: /logout
           method: delete
 
   register:
-    handler: api/userHandler.register
+    handler: api/handler/userHandler.register
     events:
       - httpApi:
           path: /register
           method: post
 
   # update:
-  #   handler: api/surveyHandler.update
+  #   handler: api/handler/surveyHandler.update
   #   events:
   #     - httpApi:
   #         path: /survey/update/
   #         method: put
           
   surveys:
-    handler: api/surveyHandler.surveys
+    handler: api/handler/surveyHandler.surveys
     events:
       - httpApi:
           path: /survey
@@ -58,7 +58,7 @@ functions:
             # name: customAuthorizer
 
   # submit:
-  #   handler: api/surveyHandler.submit
+  #   handler: api/handler/surveyHandler.submit
   #   events:
   #     - httpApi:
   #         path: /survey/submit/
@@ -67,7 +67,7 @@ functions:
   #           name: customAuthorizer
 
   # results:
-  #   handler: api/surveyHandler.results/
+  #   handler: api/handler/surveyHandler.results/
   #   events:
   #     - httpApi:
   #         path: /survey/results
@@ -76,7 +76,7 @@ functions:
   #           name: customAuthorizer
 
   verifyUser: 
-    handler: api/authHandler.authorize
+    handler: api/handler/authHandler.authorize
 
 plugins:
   - serverless-plugin-typescript

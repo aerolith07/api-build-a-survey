@@ -1,7 +1,7 @@
-import connectMongo from './lib/mongoose';
-import loginHandler from './user/login';
-import logoutHandler from './user/logout';
-import registerHandler from './user/register';
+import connectMongo from '../lib/mongoose';
+import loginHandler from '../services/user/login';
+import logoutHandler from '../services/user/logout';
+import registerHandler from '../services/user/register';
 
 const initServer = async () => {
   await connectMongo();

@@ -1,7 +1,5 @@
-import jwt from 'jsonwebtoken';
-import env from './lib/config';
-import connectMongo from './lib/mongoose';
-import surveysHandler from './survey/surveys';
+import connectMongo from '../lib/mongoose';
+import surveysHandler from '../services/survey/surveys';
 
 const initServer = async (data) => {
   await connectMongo();

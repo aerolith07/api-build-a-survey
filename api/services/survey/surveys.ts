@@ -1,4 +1,4 @@
-import response from '../lib/helpers/result';
+import response from '../../lib/responseHelpers/result';
 
 const surveyHandler = (data) => response({ data, message: 'succcess!' });
 

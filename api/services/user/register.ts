@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import env from '../lib/config';
-import error, { noBodyError } from '../lib/helpers/error';
-import result from '../lib/helpers/result';
-import user from '../models/user';
-import { AWSGatewayProxyFunction } from '../types';
+import env from '../../lib/config';
+import error, { noBodyError } from '../../lib/responseHelpers/error';
+import result from '../../lib/responseHelpers/result';
+import user from '../../models/userModel';
+import { AWSGatewayProxyFunction } from '../../types';
 
 const registerHandler: AWSGatewayProxyFunction = async (event) => {
   if (!env.SECRET) { return error('Environment not set up correctly - cannot make user'); }
