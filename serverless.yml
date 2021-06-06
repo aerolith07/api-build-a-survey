@@ -1,0 +1,83 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: build-a-survey
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  httpApi:
+    authorizers:
+      customAuthorizer:
+        type: request
+        functionName: verifyUser
+  environment:
+    SECRET: ${env:SECRET}
+    MONGO_URI: ${env:MONGO_URI}
+
+useDotenv: true
+
+functions:
+  login:
+    handler: api/handler/userHandler.login
+    events:
+      - httpApi:
+          path: /login
+          method: post
+
+  logout:
+    handler: api/handler/userHandler.logout
+    events:
+      - httpApi:
+          path: /logout
+          method: delete
+
+  register:
+    handler: api/handler/userHandler.register
+    events:
+      - httpApi:
+          path: /register
+          method: post
+
+  # update:
+  #   handler: api/handler/surveyHandler.update
+  #   events:
+  #     - httpApi:
+  #         path: /survey/update/
+  #         method: put
+          
+  surveys:
+    handler: api/handler/surveyHandler.surveys
+    events:
+      - httpApi:
+          path: /survey
+          method: get
+          # authorizer: 
+            # name: customAuthorizer
+
+  # submit:
+  #   handler: api/handler/surveyHandler.submit
+  #   events:
+  #     - httpApi:
+  #         path: /survey/submit/
+  #         method: post
+  #         authorizer: 
+  #           name: customAuthorizer
+
+  # results:
+  #   handler: api/handler/surveyHandler.results/
+  #   events:
+  #     - httpApi:
+  #         path: /survey/results
+  #         method: get
+  #         authorizer: 
+  #           name: customAuthorizer
+
+  verifyUser: 
+    handler: api/handler/authHandler.authorize
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
