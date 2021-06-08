@@ -374,6 +374,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@serverless/typescript@^2.43.1":
+  version "2.43.1"
+  resolved "http://bvrprdnex001.iggroup.local:8081/nexus/content/groups/npm-all/@serverless/typescript/-/typescript-2.43.1.tgz#845ddc7e4b6fd7521190694dd0f3df173d237478"
+  integrity sha512-+fZN+YbLxioBDFhhpSke6aNMN1KILwb8cv9Ra6JLMsycAhf5KcEjN52a8zUfuL/MQQUrrMjg2GFd8jrS7FEIqA==
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "http://bvrprdnex001.iggroup.local:8081/nexus/content/groups/npm-all/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"

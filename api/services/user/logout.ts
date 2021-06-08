@@ -1,4 +1,4 @@
-const logoutHandler = async (event) => ({
+const logoutHandler = async (event: any) => ({
   statusCode: 200,
   body: JSON.stringify(
     {

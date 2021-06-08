@@ -13,70 +13,100 @@ provider:
       customAuthorizer:
         type: request
         functionName: verifyUser
+        enableSimpleResponses: true
   environment:
     SECRET: ${env:SECRET}
     MONGO_URI: ${env:MONGO_URI}
+    BUILD_STAGE: ${env:BUILD_STAGE}
 
 useDotenv: true
 
 functions:
+  verifyUser: 
+    handler: api/handlers/authHandler.authorize
+
   login:
-    handler: api/handler/userHandler.login
+    handler: api/handlers/userHandler.login
     events:
       - httpApi:
           path: /login
           method: post
 
   logout:
-    handler: api/handler/userHandler.logout
+    handler: api/handlers/userHandler.logout
     events:
       - httpApi:
           path: /logout
           method: delete
 
   register:
-    handler: api/handler/userHandler.register
+    handler: api/handlers/userHandler.register
     events:
       - httpApi:
           path: /register
           method: post
 
-  # update:
-  #   handler: api/handler/surveyHandler.update
-  #   events:
-  #     - httpApi:
-  #         path: /survey/update/
-  #         method: put
-          
-  surveys:
-    handler: api/handler/surveyHandler.surveys
+  surveyCreate:
+    handler: api/handlers/surveyHandler.createSurvey
     events:
       - httpApi:
-          path: /survey
+          path: /survey/create
+          method: post
+          # authorizer: 
+            # name: customAuthorizer
+
+  surveyUpdate:
+    handler: api/handlers/surveyHandler.updateSurvey
+    events:
+      - httpApi:
+          path: /survey/update/{id}
+          method: put
+          # authorizer: 
+            # name: customAuthorizer
+
+  surveyPublish:
+    handler: api/handlers/surveyHandler.toggleSurveyPublish
+    events:
+      - httpApi:
+          path: /survey/publish/{id}
+          method: put
+          # authorizer: 
+            # name: customAuthorizer
+          
+  surveyById:
+    handler: api/handlers/surveyHandler.surveyById
+    events:
+      - httpApi:
+          path: /survey/{id}
+          method: get
+          # authorizer: 
+            # name: customAuthorizer
+  
+  surveysByUser:
+    handler: api/handlers/surveyHandler.surveysByUser
+    events:
+      - httpApi:
+          path: /survey/user
           method: get
           # authorizer: 
             # name: customAuthorizer
 
-  # submit:
-  #   handler: api/handler/surveyHandler.submit
-  #   events:
-  #     - httpApi:
-  #         path: /survey/submit/
-  #         method: post
+  submit:
+    handler: api/handlers/answerHandler.submit
+    events:
+      - httpApi:
+          path: /survey/submit/{id}
+          method: post
+
+  results:
+    handler: api/handlers/answerHandler.results
+    events:
+      - httpApi:
+          path: /survey/results/{id}
+          method: get
   #         authorizer: 
   #           name: customAuthorizer
 
-  # results:
-  #   handler: api/handler/surveyHandler.results/
-  #   events:
-  #     - httpApi:
-  #         path: /survey/results
-  #         method: get
-  #         authorizer: 
-  #           name: customAuthorizer
-
-  verifyUser: 
-    handler: api/handler/authHandler.authorize
 
 plugins:
   - serverless-plugin-typescript

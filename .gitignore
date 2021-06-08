@@ -33,3 +33,4 @@ jspm_packages
 # Serverless directories
 .serverless
 .build
+/.temp
