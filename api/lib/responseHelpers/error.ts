@@ -2,8 +2,14 @@ const error = (message: string, statusCode = 500) => {
   const err = Error(message);
   return ({
     statusCode,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ statusCode, message: err.message, stack: err.stack }, null, 2),
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:3001',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify({
+      statusCode, message: err.message, status: false, stack: err.stack,
+    }, null, 2),
   });
 };
 

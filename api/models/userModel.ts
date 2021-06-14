@@ -7,7 +7,7 @@ interface UserType {
 }
 
 const userSchema = new Schema<UserType>({
-  name: { type: String },
+  name: { type: String, required: true },
   username: {
     type: String, required: true, lowercase: true, unique: true, trim: true,
   },

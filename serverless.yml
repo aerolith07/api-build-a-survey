@@ -9,6 +9,7 @@ provider:
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
   httpApi:
+    cors: true
     authorizers:
       customAuthorizer:
         type: request
@@ -53,7 +54,7 @@ functions:
           path: /survey/create
           method: post
           # authorizer: 
-            # name: customAuthorizer
+          #   name: customAuthorizer
 
   surveyUpdate:
     handler: api/handlers/surveyHandler.updateSurvey
@@ -62,16 +63,16 @@ functions:
           path: /survey/update/{id}
           method: put
           # authorizer: 
-            # name: customAuthorizer
+          #   name: customAuthorizer
 
   surveyPublish:
-    handler: api/handlers/surveyHandler.toggleSurveyPublish
+    handler: api/handlers/surveyHandler.setSurveyPublish
     events:
       - httpApi:
           path: /survey/publish/{id}
           method: put
           # authorizer: 
-            # name: customAuthorizer
+          #   name: customAuthorizer
           
   surveyById:
     handler: api/handlers/surveyHandler.surveyById
@@ -80,7 +81,7 @@ functions:
           path: /survey/{id}
           method: get
           # authorizer: 
-            # name: customAuthorizer
+          #   name: customAuthorizer
   
   surveysByUser:
     handler: api/handlers/surveyHandler.surveysByUser
@@ -89,7 +90,7 @@ functions:
           path: /survey/user
           method: get
           # authorizer: 
-            # name: customAuthorizer
+          #   name: customAuthorizer
 
   submit:
     handler: api/handlers/answerHandler.submit
@@ -104,8 +105,8 @@ functions:
       - httpApi:
           path: /survey/results/{id}
           method: get
-  #         authorizer: 
-  #           name: customAuthorizer
+          # authorizer: 
+          #   name: customAuthorizer
 
 
 plugins:

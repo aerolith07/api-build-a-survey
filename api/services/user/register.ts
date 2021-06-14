@@ -20,9 +20,13 @@ const registerHandler: AWSGatewayProxyFunction = async (event) => {
       username: parsedBody.username,
     });
     const token = jwt.sign({ id }, env.SECRET, { expiresIn: 60 * 60 * 24 });
-    return result({ user: { username, id }, token }, 200, { 'Set-Cookie': `token=${token}` });
+    return result({ username, id, token }, 200, { 'Set-Cookie': `token=${token}; Secure; HttpOnly` });
   } catch (err) {
-    return (err);
+    console.log(err);
+    if (err.code === 11000) {
+      return error('Duplicate Username', 409);
+    }
+    return error(err);
   }
 };
 

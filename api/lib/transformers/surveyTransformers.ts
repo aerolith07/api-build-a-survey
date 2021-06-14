@@ -20,8 +20,25 @@ export const transformSurveyDataForFE = (surveyData: SurveyDataDB): SurveyDataFr
 
 const transformQuestionsForFE = (questions: QuestionType[]) => questions.map((question) => {
   const { questionType: type, questionId: id, ...content } = question;
+  console.log('questions', type, id, 'question');
   return ({ [type]: { [id]: { ...content } } });
-}).reduce((arr, current) => ({ ...arr, ...current }));
+}).reduce((prev, current) => {
+  // console.log('--------------');
+  // console.log('current', current);
+  const [[type, content]] = Object.entries(current);
+  console.log(type, 'type');
+  console.log(content, 'value');
+  console.log('11111', prev);
+
+  const typeMerged = {
+    [type]: {
+      ...prev[type],
+      ...content,
+    },
+  };
+  console.log(typeMerged);
+  return ({ ...prev, ...typeMerged });
+});
 
 const transformQuestionsForDB = (questions: QuestionGroupFE) => {
   const transformedQuestionGroups = Object.entries(questions)

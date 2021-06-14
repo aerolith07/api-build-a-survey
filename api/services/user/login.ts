@@ -18,8 +18,10 @@ const loginHandler: AWSGatewayProxyFunction = async (event) => {
   if (validUser?.hash && success) {
     // TODO move to separate function
     const token = jwt.sign({ id: validUser.id }, env.SECRET, { expiresIn: 60 * 60 * 24 });
-    return response({ success }, 200, {
-      'Set-Cookie': `token=${token}`,
+    return response({
+      success, token, username: validUser.username, id: validUser.id,
+    }, 200, {
+      'Set-Cookie': `token=${token}; Secure; HttpOnly`,
     });
   }
   return error('Invalid user', 503);

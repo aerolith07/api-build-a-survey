@@ -1,10 +1,10 @@
 import connectMongo from '../lib/mongoose';
-import error from '../lib/responseHelpers/error';
+import error, { noUserIdError } from '../lib/responseHelpers/error';
 import {
   createSurveyHandler,
   surveyBySurveyIdHandler,
   surveyByUserIdHandler,
-  toggleSurveyPublishHandler,
+  setSurveyPublishHandler,
   updateSurveyHandler,
 } from '../services/survey/surveys';
 import { AWSGatewayProxyFunction } from '../types';
@@ -17,28 +17,34 @@ const initServer = async () => {
 export const createSurvey:AWSGatewayProxyFunction = async (event) => {
   await initServer();
   const userId = getUserId(event);
+  if (!userId) { return noUserIdError(); }
   return createSurveyHandler(event, userId).catch((err) => error(err.message));
 };
 
 export const updateSurvey:AWSGatewayProxyFunction = async (event) => {
   await initServer();
   const userId = getUserId(event);
+  if (!userId) { return noUserIdError(); }
   return updateSurveyHandler(event, userId).catch((err) => error(err.message));
 };
 
-export const toggleSurveyPublish:AWSGatewayProxyFunction = async (event) => {
+export const setSurveyPublish:AWSGatewayProxyFunction = async (event) => {
   await initServer();
   const userId = getUserId(event);
-  return toggleSurveyPublishHandler(event, userId).catch((err) => error(err.message));
+  if (!userId) { return noUserIdError(); }
+  return setSurveyPublishHandler(event, userId).catch((err) => error(err.message));
 };
 
 export const surveysByUser:AWSGatewayProxyFunction = async (event) => {
   await initServer();
   const userId = getUserId(event);
+  if (!userId) { return noUserIdError(); }
   return surveyByUserIdHandler(event, userId).catch((err) => error(err.message));
 };
 
 export const surveyById:AWSGatewayProxyFunction = async (event) => {
   await initServer();
-  return surveyBySurveyIdHandler(event).catch((err) => error(err.message));
+  const userId = getUserId(event);
+  if (!userId) { return noUserIdError(); }
+  return surveyBySurveyIdHandler(event, userId).catch((err) => error(err.message));
 };
