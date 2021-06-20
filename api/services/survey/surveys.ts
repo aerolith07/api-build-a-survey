@@ -51,7 +51,6 @@ export const surveyBySurveyIdHandler: AWSGatewayProxyFunctionWithId = async (dat
   const surveyData = await surveyModel.findById(id).exec();
   if (!surveyData) { return error(`no survey found with ID ${id}`, 404); }
 
-  // TODO return survey if it belongs to user, or if it is published
   const isSurveyOwner = surveyData.user.toString() === userId;
   const isPublished = surveyData.published;
   if (!(isPublished || isSurveyOwner)) { return error('This survey is currently unpublished', 403); }

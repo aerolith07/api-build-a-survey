@@ -18,6 +18,7 @@ export const submit:AWSGatewayProxyFunction = async (event) => {
 
 export const results:AWSGatewayProxyFunction = async (event) => {
   await initServer();
+  console.log('results');
   const userId = getUserId(event);
   return surveyResultsHandler(event, userId).catch((err) => error(err.message));
 };

@@ -13,7 +13,7 @@ export type AnswerSchemaType = {
   answer: AnswerType[]
 }
 
-const answerSchema = new Schema<AnswerSchemaType>({
+const answersSchema = new Schema<AnswerSchemaType>({
   answer: [{
     id: { ...RequiredString },
     title: { ...RequiredString },
@@ -24,4 +24,4 @@ const answerSchema = new Schema<AnswerSchemaType>({
   }],
 });
 
-export default model<AnswerSchemaType>('answers', answerSchema);
+export default model<AnswerSchemaType>('answers', answersSchema);

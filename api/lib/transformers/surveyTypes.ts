@@ -25,6 +25,8 @@ export type QuestionGroupFE = {
 export type QuestionStoreProperties = {
   questionId: string,
   questionType: string,
+  total: number,
+  options: { id: string, value: string, count: string}[]
 }
 
 export type QuestionFrontend = {

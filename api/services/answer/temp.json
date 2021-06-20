@@ -1,0 +1,47 @@
+{"answer": [
+  {
+  "id": "questionId",
+  "title":  "...RequiredString ",
+  "options": [{
+    "id":  "optionId" ,
+    "value": "typeString" 
+    }]
+  }
+],
+
+"stats": [
+  {
+    "id": "questionId",
+    "title":  "...RequiredString",
+    "total": 0,
+    "options": [
+      {
+        "id": "optionId",
+        "value": "typeString",
+        "count": 0
+      },
+      {
+        "id": "optionId",
+        "value": "typeString",
+        "count": 0
+      }
+    ]
+  },
+  {
+    "id": "questionId",
+    "title":  "...RequiredString",
+    "total": 0,
+    "options": [
+      {
+        "id": "optionId",
+        "value": "typeString",
+        "count": 0
+      },
+      {
+        "id": "optionId",
+        "value": "typeString",
+        "count": 0
+      }
+    ]
+  }
+]}

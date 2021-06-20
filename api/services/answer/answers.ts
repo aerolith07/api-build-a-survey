@@ -8,15 +8,34 @@ import { AWSGatewayProxyFunction, AWSGatewayProxyFunctionWithId } from '../../ty
 export const submitAnswerHandler: AWSGatewayProxyFunction = async (event) => {
   const surveyId = getSurveyId(event);
   const answers = getAnswers(event);
-  console.log('aaaaaa', answers);
 
-  return answerModel.create(answers)
-    .then((answersModel) => surveyModel.findByIdAndUpdate(surveyId,
-      { $push: { answers: answersModel.id } },
-      { new: true }))
+  return answerModel.create({ answer: answers })
+    .then((newAnswers) => surveyModel.findById(surveyId)
+      .then((surveySchema) => {
+        if (!surveySchema) { throw new Error(`No survey found with id: ${surveyId}`); }
+        surveySchema.update({ $push: { answers: newAnswers.id } }, { new: true }).exec();
+
+        answers.forEach((answer) => {
+          const question = surveySchema.survey.questions.find(
+            (ques) => ques.questionId === answer.id,
+          );
+          if (!question) { throw new Error(`question with id ${answer.id} not found, title: ${answer.title}`); }
+          question.total += 1;
+
+          answer.options.forEach((answerOption) => {
+            const option = question.options.find((queOpt) => queOpt.id === answerOption.id);
+            if (!option) { throw new Error(`option with id: ${answerOption.id} not found, value: ${answerOption.value}, title: ${answer.title}`); }
+
+            if (!!(answerOption.value) === true) {
+              option.count += 1;
+            }
+          });
+        });
+        return surveySchema.save();
+      }))
     .then((res) => {
       if (!res) { return error('No survey found to update'); }
-      return response(res.toObject());
+      return response({ success: true });
     })
     .catch((err) => error(err.message));
 };
@@ -38,7 +57,7 @@ const getSurveyId = (event:APIGatewayProxyEvent) => {
 
 const getAnswers = (event:APIGatewayProxyEvent) => {
   if (!event.body) { throw Error('no body'); }
-  const answers: AnswerType[] = JSON.parse(event.body);
+  const { answers }: {answers:AnswerType[]} = JSON.parse(event.body);
   // const surveyData = transformSurveyDataForDB(survey);
   if (!answers) { throw Error('invalid body'); }
 
