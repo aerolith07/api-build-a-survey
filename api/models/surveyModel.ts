@@ -1,5 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
 import { OrderTypeDB, QuestionType } from '../lib/transformers/surveyTypes';
+import answerModel, { AnswerType } from './answerModel';
 import userModel from './userModel';
 
 const RequiredString = { type: String, required: true };
@@ -11,7 +12,8 @@ export interface SurveyDataType {
     questions: QuestionType[]
     order: OrderTypeDB[]
   }
-  published: boolean
+  published: boolean,
+  answers: AnswerType[]
 }
 
 const OrderSchema = new Schema<OrderTypeDB>({
@@ -46,12 +48,15 @@ const surveySchema = new Schema<SurveyDataType>({
     order: { type: [OrderSchema], validator: validateLength },
   },
   published: { type: Boolean, required: true, default: false },
+  answers: [{
+    type: Types.ObjectId, ref: answerModel,
+  }],
 }, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
 surveySchema.virtual('title').get(function getit(this: SurveyDataType) {
   const firstTitle = this.survey.order.find((question: { type: string; }) => question.type === 'title');
   if (!firstTitle) { return 'untitled'; }
-  return firstTitle ? this.survey.questions.find(((q) => firstTitle.questionId === q.questionId))?.title : 'undefined';
+  return this.survey.questions.find(((q) => firstTitle.questionId === q.questionId))?.title;
 });
 
 export default model<SurveyDataType>('surveys', surveySchema);

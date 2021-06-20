@@ -1,25 +1,23 @@
-import { model, Schema, Types } from 'mongoose';
-import surveyModel from './surveyModel';
+import { model, Schema } from 'mongoose';
 
 const RequiredString = { type: String, required: true };
 
 export type AnswerType = {
   id: string,
   title: string,
-  value: {id: string, value?: string}[]
+  options: {id: string, value?: string}[]
 }
 
 export type AnswerSchemaType = {
-  surveyId: string
+  id: string
   answer: AnswerType[]
 }
 
 const answerSchema = new Schema<AnswerSchemaType>({
-  surveyId: { type: Types.ObjectId, ref: surveyModel, required: true },
   answer: [{
     id: { ...RequiredString },
     title: { ...RequiredString },
-    value: [{
+    options: [{
       id: { ...RequiredString },
       value: { type: String },
     }],

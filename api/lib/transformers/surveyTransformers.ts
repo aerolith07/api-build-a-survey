@@ -23,12 +23,7 @@ const transformQuestionsForFE = (questions: QuestionType[]) => questions.map((qu
   console.log('questions', type, id, 'question');
   return ({ [type]: { [id]: { ...content } } });
 }).reduce((prev, current) => {
-  // console.log('--------------');
-  // console.log('current', current);
   const [[type, content]] = Object.entries(current);
-  console.log(type, 'type');
-  console.log(content, 'value');
-  console.log('11111', prev);
 
   const typeMerged = {
     [type]: {

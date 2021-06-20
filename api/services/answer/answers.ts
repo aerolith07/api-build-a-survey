@@ -8,9 +8,16 @@ import { AWSGatewayProxyFunction, AWSGatewayProxyFunctionWithId } from '../../ty
 export const submitAnswerHandler: AWSGatewayProxyFunction = async (event) => {
   const surveyId = getSurveyId(event);
   const answers = getAnswers(event);
+  console.log('aaaaaa', answers);
 
-  return answerModel.create({ surveyId, answers })
-    .then((res) => response(res))
+  return answerModel.create(answers)
+    .then((answersModel) => surveyModel.findByIdAndUpdate(surveyId,
+      { $push: { answers: answersModel.id } },
+      { new: true }))
+    .then((res) => {
+      if (!res) { return error('No survey found to update'); }
+      return response(res.toObject());
+    })
     .catch((err) => error(err.message));
 };
 
@@ -19,8 +26,9 @@ export const surveyResultsHandler: AWSGatewayProxyFunctionWithId = async (event,
   const survey = surveyModel.find({ id: surveyId, userId });
   if (!survey) { return error('no survey'); }
 
-  const answers = await answerModel.find({ surveyId }).exec();
-  return response(answers);
+  const answers = await surveyModel.findById(surveyId).populate('answers').exec();
+  if (!answers) { return error('no answers found'); }
+  return response(answers.toObject());
 };
 
 const getSurveyId = (event:APIGatewayProxyEvent) => {
@@ -34,5 +42,5 @@ const getAnswers = (event:APIGatewayProxyEvent) => {
   // const surveyData = transformSurveyDataForDB(survey);
   if (!answers) { throw Error('invalid body'); }
 
-  return { answers };
+  return answers;
 };

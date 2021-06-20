@@ -55,13 +55,13 @@ export const surveyBySurveyIdHandler: AWSGatewayProxyFunctionWithId = async (dat
   const isSurveyOwner = surveyData.user.toString() === userId;
   const isPublished = surveyData.published;
   if (!(isPublished || isSurveyOwner)) { return error('This survey is currently unpublished', 403); }
+  const surveyDataObj = surveyData.toObject();
 
-  const transformedSurvey = transformSurveyDataForFE(surveyData.toObject().survey);
-  return response(transformedSurvey);
+  const transformedSurvey = transformSurveyDataForFE(surveyDataObj.survey);
+  return response({ ...transformedSurvey, ...surveyDataObj });
 };
 
 export const surveyByUserIdHandler: AWSGatewayProxyFunctionWithId = async (_data, userId) => {
-  console.log('data', userId);
   const surveys = await surveyModel.find({ user: userId }).exec();
   const surveysData = surveys.map((surveyData) => {
     const { survey: _survey, ...rest } = surveyData.toObject();
